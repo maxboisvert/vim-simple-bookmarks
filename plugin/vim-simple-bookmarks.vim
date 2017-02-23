@@ -27,8 +27,17 @@ fun! ListBookmarks()
 
     call setqflist(bookmarks)
     copen
+    nnoremap <silent> <buffer> <cr> <cr>:cclose<cr>
+    nnoremap <buffer> dd :call DeleteBookmark()<cr>
 endfun
 
 fun! ClearBookmarks()
     call system('rm ' . g:vsb_file)
+endfun
+
+fun! DeleteBookmark()
+    let lnum = line('.')
+
+    call system('sed -i "" "' . lnum . 'd" ' . g:vsb_file)
+    call ListBookmarks()
 endfun
