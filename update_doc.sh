@@ -1,1 +1,1 @@
-cat README.md > doc/vim-simple-complete.txt
+cat README.md > doc/vim-simple-bookmarks.txt
