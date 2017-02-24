@@ -11,12 +11,12 @@ Or use your prefered way.
 
 ### Add a bookmark
 ```
-call AddBookmark()
+:AddBookmark
 ```
 
 ### List bookmarks
 ```
-call ListBookmarks()
+:ListBookmarks
 ```
 
 This will open the bookmarks list. Press enter to go to a bookmark.
@@ -26,7 +26,22 @@ This will open the bookmarks list. Press enter to go to a bookmark.
 press `dd` when a bookmark is selected in the list.
 
 ```
-call ClearBookmarks()
+:ClearBookmarks
+```
+
+## Options
+
+```VimL
+let g:vsb_file = '.vim-simple-bookmarks'
+```
+
+## Mapping
+
+Add this to your .vimrc
+
+```
+nnoremap <Leader>m :AddBookmark<CR>
+nnoremap <Leader>n :ListBookmarks<CR>
 ```
 
 ## License

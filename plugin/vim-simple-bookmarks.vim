@@ -5,39 +5,52 @@ let g:loaded_vim_simple_bookmarks = 1
 
 let g:vsb_file = get(g:, 'vsb_file', ".vim-simple-bookmarks")
 
-fun! AddBookmark()
-    let file   = expand('%')
-    let line = getline('.')
-    let line_number = line('.')
-
-    call system('echo "' . file . ':' . line_number . '" >> ' . g:vsb_file)
+fun! s:Init()
+    call s:SimpleBookmarksPlugin()
 endfun
 
-fun! ListBookmarks()
-    let bookmarks = []
+fun! s:SimpleBookmarksPlugin()
+    command ListBookmarks call <SID>ListBookmarks()
+    command ClearBookmarks call <SID>ClearBookmarks()
+    command AddBookmark call <SID>AddBookmark()
 
-    for bookmark in split(system('cat ' . g:vsb_file . ' 2>/dev/null'), '\n')
-        let values = split(bookmark, ':')
-        let filename = values[0]
-        let lnum = values[1]
-        let line = system('sed -n "' . lnum . 'p" < ' . filename)
+    fun! s:AddBookmark()
+        let file   = expand('%')
+        let line = getline('.')
+        let line_number = line('.')
 
-        call add(bookmarks, { 'text': line, 'filename': filename, 'lnum': lnum })
-    endfor
+        call system('echo "' . file . ':' . line_number . '" >> ' . g:vsb_file)
+    endfun
 
-    call setqflist(bookmarks)
-    copen
-    nnoremap <silent> <buffer> <cr> <cr>:cclose<cr>
-    nnoremap <buffer> dd :call DeleteBookmark()<cr>
+    fun! s:ListBookmarks()
+        let bookmarks = []
+
+        for bookmark in split(system('cat ' . g:vsb_file . ' 2>/dev/null'), '\n')
+            let values = split(bookmark, ':')
+            let filename = values[0]
+            let lnum = values[1]
+            let line = system('sed -n "' . lnum . 'p" < ' . filename)
+
+            call add(bookmarks, { 'text': line, 'filename': filename, 'lnum': lnum })
+        endfor
+
+        call setqflist(bookmarks)
+        copen
+        nnoremap <silent> <buffer> <cr> <cr>:cclose<cr>
+        nnoremap <silent> <buffer> dd :call <SID>DeleteBookmark()<cr>
+        "nnoremap <buffer> <Esc> :cclose<CR>
+    endfun
+
+    fun! s:ClearBookmarks()
+        call system('rm ' . g:vsb_file)
+    endfun
+
+    fun! s:DeleteBookmark()
+        let lnum = line('.')
+
+        call system('sed -i "" "' . lnum . 'd" ' . g:vsb_file)
+        call s:ListBookmarks()
+    endfun
 endfun
 
-fun! ClearBookmarks()
-    call system('rm ' . g:vsb_file)
-endfun
-
-fun! DeleteBookmark()
-    let lnum = line('.')
-
-    call system('sed -i "" "' . lnum . 'd" ' . g:vsb_file)
-    call ListBookmarks()
-endfun
+call s:Init()
