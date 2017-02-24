@@ -48,7 +48,7 @@ fun! s:SimpleBookmarksPlugin()
     fun! s:DeleteBookmark()
         let lnum = line('.')
 
-        call system('sed -i "" "' . lnum . 'd" ' . g:vsb_file)
+        call system('sed -i -e "' . lnum . 'd" ' . g:vsb_file)
         call s:ListBookmarks()
     endfun
 endfun
