@@ -15,34 +15,39 @@ fun! s:SimpleBookmarksPlugin()
     command AddBookmark call <SID>AddBookmark()
 
     fun! s:AddBookmark()
-        let file   = expand('%')
-        let line = getline('.')
-        let line_number = line('.')
+        let filename   = expand('%')
+        let text = getline('.')
+        let lnum = line('.')
 
-        call system('echo "' . file . ':' . line_number . '" >> ' . g:vsb_file)
+        let data = {'filename': filename, 'text': text, 'lnum': lnum}
+
+        call writefile([json_encode(data)], g:vsb_file, 'a')
     endfun
 
     fun! s:ListBookmarks()
-        let bookmarks = []
-
-        for bookmark in split(system('cat ' . g:vsb_file . ' 2>/dev/null'), '\n')
-            let values = split(bookmark, ':')
-            let filename = values[0]
-            let lnum = values[1]
-            let line = system('sed -n "' . lnum . 'p" < ' . filename)
-
-            call add(bookmarks, { 'text': line, 'filename': filename, 'lnum': lnum })
-        endfor
-
-        call setqflist(bookmarks)
+        call setqflist(s:GetBookmarks())
         copen
         nnoremap <silent> <buffer> <cr> <cr>:cclose<cr>
         nnoremap <silent> <buffer> dd :call <SID>DeleteBookmark()<cr>
-        "nnoremap <buffer> <Esc> :cclose<CR>
+    endfun
+
+    fun! s:GetBookmarks()
+        let bookmarks = []
+
+        if !s:FileExists(g:vsb_file)
+            return bookmarks
+        endif
+
+        for bookmark_json in readfile(g:vsb_file)
+            call add(bookmarks, json_decode(bookmark_json))
+        endfor
+
+        return bookmarks
     endfun
 
     fun! s:ClearBookmarks()
-        call system('rm ' . g:vsb_file)
+        call setqflist([])
+        call delete(g:vsb_file)
     endfun
 
     fun! s:DeleteBookmark()
@@ -50,6 +55,10 @@ fun! s:SimpleBookmarksPlugin()
 
         call system('sed -i -e "' . lnum . 'd" ' . g:vsb_file)
         call s:ListBookmarks()
+    endfun
+
+    fun! s:FileExists(file)
+        return filereadable(a:file)
     endfun
 endfun
 
