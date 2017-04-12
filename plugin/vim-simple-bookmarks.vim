@@ -10,9 +10,9 @@ fun! s:Init()
 endfun
 
 fun! s:SimpleBookmarksPlugin()
-    command ListBookmarks call <SID>ListBookmarks()
-    command ClearBookmarks call <SID>ClearBookmarks()
-    command AddBookmark call <SID>AddBookmark()
+    command SimpleBookmarksList call <SID>ListBookmarks()
+    command SimpleBookmarksClear call <SID>ClearBookmarks()
+    command SimpleBookmarksAdd call <SID>AddBookmark()
 
     fun! s:AddBookmark()
         let filename   = expand('%')
@@ -28,6 +28,7 @@ fun! s:SimpleBookmarksPlugin()
         call setqflist(s:GetBookmarks())
         copen
         nnoremap <silent> <buffer> <cr> <cr>:cclose<cr>
+        nnoremap <silent> <buffer> q :cclose<cr>
         nnoremap <silent> <buffer> dd :call <SID>DeleteBookmark()<cr>
     endfun
 

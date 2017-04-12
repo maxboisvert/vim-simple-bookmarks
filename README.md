@@ -11,12 +11,12 @@ Or use your prefered way.
 
 ### Add a bookmark
 ```
-:AddBookmark
+:SimpleBookmarksAdd
 ```
 
 ### List bookmarks
 ```
-:ListBookmarks
+:SimpleBookmarksList
 ```
 
 This will open the bookmarks list. Press enter to go to a bookmark.
@@ -26,7 +26,7 @@ This will open the bookmarks list. Press enter to go to a bookmark.
 press `dd` when a bookmark is selected in the list.
 
 ```
-:ClearBookmarks
+:SimpleBookmarksClear
 ```
 
 ## Options
