@@ -3,12 +3,7 @@
 endif
 let g:loaded_vim_simple_bookmarks = 1
 
-let vsb_workdir = get(g:, 'tmp_file_prefix', ".")
-let g:vsb_file = get(g:, 'vsb_file', vsb_workdir . "vim-simple-bookmarks")
-
-fun! s:Init()
-    call s:SimpleBookmarksPlugin()
-endfun
+let g:vsb_file = get(g:, 'vsb_file', ".vim-simple-bookmarks")
 
 fun! s:SimpleBookmarksPlugin()
     command SimpleBookmarksList call <SID>ListBookmarks()
@@ -64,4 +59,4 @@ fun! s:SimpleBookmarksPlugin()
     endfun
 endfun
 
-call s:Init()
+call s:SimpleBookmarksPlugin()
