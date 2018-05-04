@@ -40,8 +40,8 @@ let g:vsb_file = '.vim-simple-bookmarks'
 Add this to your .vimrc
 
 ```
-nnoremap <Leader>m :AddBookmark<CR>
-nnoremap <Leader>n :ListBookmarks<CR>
+nnoremap <Leader>m :SimpleBookmarksAdd<CR>
+nnoremap <Leader>n :SimpleBookmarksList<CR>
 ```
 
 ## License
